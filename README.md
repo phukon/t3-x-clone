@@ -1,6 +1,6 @@
-# Twitter clone (but with the t3 stack)
+# X (formerly Twitter) clone (t3 stack)
 
-> ❓: whats the T3 stack?
+>💬 whats the T3 stack?
 
 ### ↘ This
 
