@@ -1,6 +1,6 @@
 type IconHoverEffectProps = {
   children: React.ReactNode;
-  red: boolean;
+  red?: boolean;
 };
 
 export function IconHoverEffect({
