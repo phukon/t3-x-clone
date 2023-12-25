@@ -1,11 +1,10 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { FollowingTweets } from "~/components/FollowingTweets";
 import { NewTweetForm } from "~/components/NewTweetForm";
 import { RecentTweets } from "~/components/RecentTweets";
 
 const TABS = ["Recent", "Following"] as const;
-
-
 
 export default function Home() {
   const session = useSession();
@@ -22,15 +21,21 @@ export default function Home() {
                 <button
                   key={tab}
                   className={`flex-grow p-2 hover:bg-gray-200 focus-visible:bg-gray-200 ${
-                    tab === selectedTab ? 'border-b-4 border-b-blue-500 font-bold' : ""}`} onClick={() => setSelectedTab(tab)}
-                >{tab}</button>
+                    tab === selectedTab
+                      ? "border-b-4 border-b-blue-500 font-bold"
+                      : ""
+                  }`}
+                  onClick={() => setSelectedTab(tab)}
+                >
+                  {tab}
+                </button>
               );
             })}
           </div>
         )}
       </header>
       <NewTweetForm />
-      <RecentTweets />
+      {selectedTab === "Recent" ? <RecentTweets /> : <FollowingTweets/>}
     </>
   );
 }

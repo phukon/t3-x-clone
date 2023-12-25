@@ -24,12 +24,10 @@ export function SideNav() {
             <Link href={`/profiles/${user.id}`}>
               {" "}
               <IconHoverEffect>
-                <Link href="/">
-                  <span className="flex items-center gap-4">
-                    <VscAccount className="h-8 w-8" />
-                    <span className="hidden text-lg md:inline">Profile</span>
-                  </span>
-                </Link>
+                <span className="flex items-center gap-4">
+                  <VscAccount className="h-8 w-8" />
+                  <span className="hidden text-lg md:inline">Profile</span>
+                </span>
               </IconHoverEffect>
             </Link>
           </li>

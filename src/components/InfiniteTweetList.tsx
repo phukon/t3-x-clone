@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { VscHeart, VscHeartFilled } from "react-icons/vsc";
 import { IconHoverEffect } from "./IconHoverEffect";
 import { api } from "~/utils/api";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 type Tweet = {
   id: string;
@@ -93,23 +94,34 @@ function TweetCard({
 
         const countModifier = addedLike ? 1 : -1;
 
-        return {...oldData, pages: oldData.pages.map(page => {
-          return {
-            ...page,
-            tweets: page.tweets.map(tweet => {
-              if (tweet.id === id) {
-                return {
-                  ...tweet,
-                  likeCount: tweet.likeCount + countModifier,
-                  likedByMe: addedLike
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page) => {
+            return {
+              ...page,
+              tweets: page.tweets.map((tweet) => {
+                if (tweet.id === id) {
+                  return {
+                    ...tweet,
+                    likeCount: tweet.likeCount + countModifier,
+                    likedByMe: addedLike,
+                  };
                 }
-              }
-              return tweet
-            })
-          }
-        })}
+                return tweet;
+              }),
+            };
+          }),
+        };
       };
       trpcUtils.tweet.infiniteFeed.setInfiniteData({}, updateData);
+      trpcUtils.tweet.infiniteFeed.setInfiniteData(
+        { onlyFollowing: true },
+        updateData,
+      );
+      trpcUtils.tweet.infiniteProfileFeed.setInfiniteData(
+        { userId: user.id },
+        updateData,
+      );
     },
   });
 
@@ -155,7 +167,7 @@ export const InfiniteTweetList = ({
   hasMore,
   fetchNewTweets,
 }: InfiniteTweetListProps) => {
-  if (isLoading) return <h1>Loading... ..</h1>;
+  if (isLoading) return <LoadingSpinner />;
   if (isError) return <h1>Error... ..</h1>;
   if (tweets == null) return null;
 
@@ -173,7 +185,7 @@ export const InfiniteTweetList = ({
         dataLength={tweets.length}
         next={fetchNewTweets}
         hasMore={hasMore}
-        loader={"loading ..."}
+        loader={<LoadingSpinner />}
       >
         {tweets.map((t) => {
           return <TweetCard key={t.id} {...t} />;
