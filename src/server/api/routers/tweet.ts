@@ -29,7 +29,7 @@ export const tweetRouter = createTRPCRouter({
         limit,
         ctx,
         cursor,
-        whereClause: {userId},
+        whereClause: { userId },
       });
     }),
   infiniteFeed: publicProcedure
@@ -67,6 +67,8 @@ export const tweetRouter = createTRPCRouter({
       const tweet = await ctx.db.tweet.create({
         data: { content, userId: ctx.session.user.id },
       });
+
+      void ctx.revalidateSSG?.(`/profiles/${ctx.session.user.id}`);
       return tweet;
     }),
   toggleLike: protectedProcedure
